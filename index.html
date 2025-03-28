@@ -1,0 +1,161 @@
+<html lang="en">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <title>Person Finance Tracker</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300" rel="stylesheet">
+        <link rel = "stylesheet" href = "style.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"></script>
+    </head>
+    <body>
+        <h1>Personal Finance Tracker</h1>
+
+        <!--Button to Retrieve Data-->
+        <button id = "retrieveDataButton" onclick="retrieveFromDatabase()">Retrieve Data</button>
+
+        <!-- Help Button (Top Right Corner) -->
+        <button id="helpButton" onclick="openHelp()">Help ❔</button>
+
+        <!-- Help Pop-Up Modal -->
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeHelp()">&times;</span>
+                <h2 id = "help-title">How to Use The Tracker</h2>
+                <p class = "helptexts">1. Enter your starting balance, you can not change it once it is set 💵</p>
+                <p class = "helptexts">2. Enter transactions by filling out information based on them, ie. incomes/expenses 📝</p>
+                <p class = "helptexts">3. Click the edit or delete buttons to modify your transactions ✍️</p>
+                <p class = "helptexts">4. Got lost in a long list of transactions? Try the search bar to find transactions by their type or category 📋.</p>
+                <p class = "helptexts">5. A graph will be automatically updated of your transactions 📈</p>
+                <p class = "helptexts">6. Want financial advice? Click the "Get Financial Advice" button 💵 ✅</p>
+                <p class = "helptexts">7. You can save your data in a PDF by clicking the "Download PDF" button at the bottom</p>
+                <p class = "helptexts">8. You can save your data to a secure database under a User ID by clicking the "Save to Database" button</p>
+                <p class = "helptexts">9. You can retrieve finances from the database with your saved User ID by clicking the "Retrieve Data" button</p>
+            </div>
+        </div>
+
+        <!--Setting up Starting Balance Entry Here-->
+        <div class = "balance-setup">
+            <label for = "startingBalance">Starting Balance: </label>
+            <input type = "number" id = "startingBalance" placeholder = "Enter Your Starting Balance Here">
+            <button onclick = "setStartingBalance()">Set Balance</button>
+        </div>
+
+        <!--Setting up Current Balance-->
+        <span class = "currentBalance">
+            <label id = "balance">Current Balance: $0.00</label>
+        </span>
+
+        <br>
+        <br>
+        <br>
+
+        <!--Setting up Form for Transaction Here-->
+        <div class = "form-container">
+            <label for = "type">Type: </label>
+            <select id = "type">
+                <option value = "Income">Income</option>
+                <option value = "Expense">Expense</option>
+            </select>
+
+            <label for = "category">Category: </label>
+            <input type = "text" id = "category" placeholder = "ie. Food, Salary, Rent, Gift">
+
+            <label for = "amount">Amount: </label>
+            <input type = "number" id = "amount" placeholder = "Amount" required>
+
+            <label for = "date">Date: </label>
+            <input type = "date" id = "date" required>
+
+            <button onclick = "addTransaction()">Add Transaction</button>
+        </div>
+
+        <div class = "searchBalance">
+            <label id = "searchLabel">Search Transaction: </label>
+             <!--Search Input for Transactions-->
+             <input type = "text" id = "search" placeholder = "Search by type or category" oninput = "filterTransactions()">
+
+             <!-- Financial Advice Button -->
+            <button onclick="giveFinancialAdvice()">Get Financial Advice</button>
+        </div>
+
+        <!-- The Pop Up -->
+        <div id="ai-advice-modal" class="modal">
+            <div class="modal-content">
+              <span class="close-btn" onclick="closeModal()">&times;</span>
+              <h2>Financial Advice</h2>
+              <p id="ai-advice"></p>
+            </div>
+          </div>
+          
+        
+        <!--Table for Transaction Here-->
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable"></tbody>
+        </table>
+        <br>
+        <br>
+        <!--Canvas for creating Data Chart Here-->
+        <canvas id = "summaryChart" width = "2000" height = "500"></canvas>
+        <br>
+        <br>
+        <button id = "buttonPDF" onclick = "pdf()">Dowload PDF</button>
+
+        <button onclick="saveToDatabase()">Save to Database</button>
+ 
+
+        <!--<script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"></script>-->
+        
+        
+        
+        <script type = "module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+            import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
+            //import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-analytics.js";
+
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+            apiKey: "AIzaSyCJoqPg7itleN8NLq8MER1hTmPaCgjk4_w",
+            authDomain: "personal-finance-tracker-f4cc8.firebaseapp.com",
+            databaseURL: "https://personal-finance-tracker-f4cc8-default-rtdb.firebaseio.com",
+            projectId: "personal-finance-tracker-f4cc8",
+            storageBucket: "personal-finance-tracker-f4cc8.firebasestorage.app",
+            messagingSenderId: "498349482797",
+            appId: "1:498349482797:web:1fa168b3d49295913de9a4",
+            measurementId: "G-DKDFWQM8D5"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            //const analytics = getAnalytics(app);
+
+            window.database = database;
+            window.ref = ref;
+            window.set = set;
+            window.get = get;
+        </script>
+
+        <script src = "main.js" defer></script>
+    </body>
+
+</html>

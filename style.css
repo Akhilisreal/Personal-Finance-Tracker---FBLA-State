@@ -1,0 +1,269 @@
+body {
+    background-color: rgb(255, 246, 243);
+    margin: 20px;
+    padding: 10px 10px;
+}
+
+/*Heading*/
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 3em;
+}
+
+/*Containers*/
+.balance-setup, .form-container, .currentBalance, .searchBalance {
+    border-radius: 7px;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+    background-color: white;
+    width: fit-content;
+    margin-bottom: 35px;
+}
+
+.balance-setup {
+    padding: 12px 20px;
+}
+
+.form-container {
+    padding: 20px 20px;
+}
+
+.currentBalance {
+    padding: 20px 20px;
+}
+
+.searchBalance {
+    padding: 10px 20px;
+}
+
+/*Search Tool*/
+#search {
+    width: fit-content;
+}
+
+/*Button Styles*/
+button {
+    background-color: rgb(255, 113, 113);
+    color: rgb(255, 255, 255);
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 37.5px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5); 
+}
+
+button:hover {
+    background-color: rgb(211, 58, 58);
+}
+
+#editButton {
+    background-color: rgb(132, 167, 239);
+}
+
+#editButton:hover {
+    background-color: rgb(69, 99, 159);
+}
+
+/*Current Balance Styling*/
+#balance {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+/*Inputs and Dropdown*/
+input, select {
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    border: 1.5px solid rgb(255, 255, 255);
+    padding: 8px;
+    text-align: left;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+/*Labels*/
+label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    margin-left: 5px;
+    margin-right: 1px;
+}
+
+/*Table Styling*/
+table {
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    padding: 10px 10px;
+    border-radius: 7px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: white;
+}
+
+th, td {
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    border: 1.5px solid rgb(222, 222, 222);
+    padding: 8px;
+    text-align: left;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+/*Graph Canvas Styling*/
+#summaryChart {
+    max-width: 99%;
+    margin: 0;
+    background-color: white;
+    border-radius: 7px;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    padding: 10px 10px; 
+    font-family: 'Montserrat', sans-serif;
+}
+
+/*Pop Up Window*/
+.modal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Background overlay */
+    padding-top: 60px;
+    justify-content: center;
+    align-items: center;
+}
+  
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+}
+  
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+  
+.close-btn:hover, .close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 2em;
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+/* Help Button (Top Right) */
+#helpButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgb(255, 113, 113);
+    color: rgb(255, 255, 255);
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 37.5px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5); 
+  }
+  
+#helpButton:hover {
+    background-color: rgb(211, 58, 58);
+}
+  
+  /* Help Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+  
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 50px;
+    width: 50%;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5); 
+}
+  
+/* Close Button */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10.5%;
+    right: 29%;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.helptexts {
+    text-align: left;
+    font-size: 1.1em;
+    margin-bottom: 22px;
+}
+
+/*Retrieve Data Button*/
+
+#retrieveDataButton {
+    position: fixed;
+    top: 10px;
+    right: 100px;
+    background-color: rgb(255, 113, 113);
+    color: rgb(255, 255, 255);
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 37.5px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5); 
+}
